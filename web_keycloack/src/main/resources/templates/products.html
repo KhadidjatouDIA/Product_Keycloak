@@ -1,27 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Produits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        form button {
+            background: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: #4cae4c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background: #f4f4f9;
+            color: #555;
+        }
+        table tr:hover {
+            background: #f1f1f1;
+        }
+        .empty {
+            text-align: center;
+            font-style: italic;
+            color: #999;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header button {
+            background: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header button:hover {
+            background: #c9302c;
+        }
+    </style>
 </head>
 <body>
-<table>
-    <thead>
+<div class="container">
+    <div class="header">
+        <h1>Gestion des Produits</h1>
+        <div>
+            <span th:text="${username}"></span>
+            <span th:text="${name}"></span>
+            <button onclick="javascript:document.location.href='http://localhost:8081/logout'">Déconnexion</button>
+        </div>
+    </div>
+
+    <form th:action="@{/products}" th:object="${product}" method="post">
+        <input type="text" placeholder="Référence du produit" id="ref" th:field="*{ref}" required />
+        <input type="text" placeholder="Nom du produit" id="name" th:field="*{name}" required />
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <table>
+        <thead>
         <tr>
-            <td> Reférence</td>
-            <td> Nom</td>
+            <th>Référence</th>
+            <th>Nom</th>
         </tr>
-    </thead>
-    <tbody>
-        <tr th:each="product:${listProducts}">
-            <td th:text="${product.ref}">
-
-            </td>
-            <td th:text="${product.name}"></td>
-
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.ref}">1</td>
+            <td><a href="#" th:text="${product.name}">Title ...</a></td>
         </tr>
-    </tbody>
-
-</table>
+        <tr th:if="${#lists.isEmpty(products)}">
+            <td colspan="2" class="empty">Aucun produit ajouté</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
