@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Produits</title>
+    <title>Produits</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,7 +37,7 @@
             border-radius: 5px;
         }
         form button {
-            background: #5cb85c;
+            background: #fc7929;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -45,7 +45,7 @@
             cursor: pointer;
         }
         form button:hover {
-            background: #4cae4c;
+            background: #000000;
         }
         table {
             width: 100%;
@@ -69,42 +69,16 @@
             font-style: italic;
             color: #999;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .header button {
-            background: #d9534f;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .header button:hover {
-            background: #c9302c;
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h1>Gestion des Produits</h1>
-        <div>
-            <span th:text="${username}"></span>
-            <span th:text="${name}"></span>
-            <button onclick="javascript:document.location.href='http://localhost:8081/logout'">Déconnexion</button>
-        </div>
-    </div>
-
-    <form th:action="@{/products}" th:object="${product}" method="post">
-        <input type="text" placeholder="Référence du produit" id="ref" th:field="*{ref}" required />
-        <input type="text" placeholder="Nom du produit" id="name" th:field="*{name}" required />
+    <h1>Mes produits</h1>
+    <form action="/products" method="POST">
+        <input type="text" name="ref" id="ref" placeholder="Référence du produit" required>
+        <input type="text" name="name" id="name" placeholder="Nom du produit" required>
         <button type="submit">Ajouter</button>
     </form>
-
     <table>
         <thead>
         <tr>
@@ -112,16 +86,42 @@
             <th>Nom</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.ref}">1</td>
-            <td><a href="#" th:text="${product.name}">Title ...</a></td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(products)}">
+        <tbody id="productList">
+        <tr>
             <td colspan="2" class="empty">Aucun produit ajouté</td>
         </tr>
         </tbody>
     </table>
 </div>
+<script>
+    // JavaScript pour l'ajout dynamique des produits
+    const productForm = document.querySelector('form');
+    const productList = document.getElementById('productList');
+
+    productForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const refInput = document.getElementById('ref');
+        const nameInput = document.getElementById('name');
+        const ref = refInput.value.trim();
+        const name = nameInput.value.trim();
+
+        if (ref && name) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `<td>${ref}</td><td>${name}</td>`;
+            productList.appendChild(newRow);
+
+            // Suppression du message vide
+            if (productList.querySelector('.empty')) {
+                productList.querySelector('.empty').remove();
+            }
+
+
+            refInput.value = '';
+            nameInput.value = '';
+            refInput.focus();
+        }
+    });
+</script>
 </body>
 </html>
