@@ -5,6 +5,6 @@ import com.dev.web_keycloack.web_keycloack.Entities.Product;
 import java.util.List;
 
 public interface ProductService {
-    void addProduct(String name);
+    void addProduct(Product product);
     List<Product> getList();
 }

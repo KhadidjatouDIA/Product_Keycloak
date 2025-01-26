@@ -7,26 +7,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-
+@Controller
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@Controller
 public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public String addProduct(@RequestParam String name) {
-        productService.addProduct(name);
-        return "redirect:/products"; // Redirige après ajout
+    public String addProduct(@ModelAttribute Product product) {
+        productService.addProduct(product);
+        return "redirect:/products"; // Redirection après l'ajout
     }
 
     @GetMapping
     public String getList(ModelMap modelMap) {
-        var list = productService.getList();
-        modelMap.addAttribute("products", list);
-        modelMap.addAttribute("product", new Product()); // Initialisation
-        return "products";
+        var products = productService.getList();
+        modelMap.addAttribute("products", products);
+        modelMap.addAttribute("product", new Product()); // Prépare un objet vide pour le formulaire
+        return "products"; // Vue Thymeleaf
     }
 }
-
-

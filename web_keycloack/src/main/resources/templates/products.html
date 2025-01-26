@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produits</title>
+    <title>Product List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,57 +69,33 @@
         }
     </style>
 </head>
+
 <body>
 <div class="container">
-    <h1>Mes produits</h1>
-    <form action="/products" method="POST">
-        <input type="text" name="ref" id="ref" placeholder="Référence du produit" required>
-        <input type="text" name="name" id="name" placeholder="Nom du produit" required>
-        <button type="submit">Ajouter</button>
-    </form>
-    <table>
-        <thead>
-        <tr>
-            <th>Référence</th>
-            <th>Nom</th>
-        </tr>
-        </thead>
-        <tbody id="productList">
-        <tr>
-            <td colspan="2" class="empty">Aucun produit ajouté</td>
-        </tr>
-        </tbody>
-    </table>
+<h1>Produits</h1>
+
+<!-- Formulaire d'ajout -->
+<form th:action="@{/products}" th:object="${product}" method="post">
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" th:field="*{name}" required />
+    <button type="submit">Add Product</button>
+</form>
+
+<!-- Liste des produits -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>Ref</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.ref}"></td>
+        <td th:text="${product.name}"></td>
+    </tr>
+    </tbody>
+</table>
 </div>
-<script>
-    // JavaScript pour l'ajout dynamique des produits
-    const productForm = document.querySelector('form');
-    const productList = document.getElementById('productList');
-
-    productForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const refInput = document.getElementById('ref');
-        const nameInput = document.getElementById('name');
-        const ref = refInput.value.trim();
-        const name = nameInput.value.trim();
-
-        if (ref && name) {
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `<td>${ref}</td><td>${name}</td>`;
-            productList.appendChild(newRow);
-
-            // Suppression du message vide
-            if (productList.querySelector('.empty')) {
-                productList.querySelector('.empty').remove();
-            }
-
-
-            refInput.value = '';
-            nameInput.value = '';
-            refInput.focus();
-        }
-    });
-</script>
 </body>
 </html>

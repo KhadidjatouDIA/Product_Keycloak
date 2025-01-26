@@ -5,22 +5,20 @@ import com.dev.web_keycloack.web_keycloack.Repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    public void addProduct(String name){
-        Product newProduct = new Product();
-        newProduct.setRef(UUID.randomUUID().toString());
-        newProduct.setName(name);
-        productRepository.save(newProduct);
+
+    @Override
+    public void addProduct(Product product) {
+        productRepository.save(product);
     }
 
-    public List<Product> getList(){
+    @Override
+    public List<Product> getList() {
         return productRepository.findAll();
     }
 }
