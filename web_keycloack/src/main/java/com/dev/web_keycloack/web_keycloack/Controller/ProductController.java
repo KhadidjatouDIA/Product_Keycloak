@@ -16,14 +16,14 @@ public class ProductController {
     @PostMapping
     public String addProduct(@ModelAttribute Product product) {
         productService.addProduct(product);
-        return "redirect:/products"; // Redirection après l'ajout
+        return "redirect:/products";
     }
 
     @GetMapping
     public String getList(ModelMap modelMap) {
         var products = productService.getList();
         modelMap.addAttribute("products", products);
-        modelMap.addAttribute("product", new Product()); // Prépare un objet vide pour le formulaire
-        return "products"; // Vue Thymeleaf
+        modelMap.addAttribute("product", new Product());
+        return "products";
     }
 }
